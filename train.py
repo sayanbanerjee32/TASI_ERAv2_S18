@@ -166,8 +166,9 @@ def get_ds(config):
     
     # train_dataloader = DataLoader(train_ds, batch_size = config["batch_size"],
     #                             shuffle = True, collate_fn = collate_fn)
+    # val_dataloader = DataLoader(val_ds, batch_size = 1, shuffle = True)
     train_dataloader = train_ds.get_dataloader(batch_size = config["batch_size"])
-    val_dataloader = DataLoader(val_ds, batch_size = 1, shuffle = True)
+    val_dataloader = val_ds.get_dataloader(batch_size = 1)
     
     return train_dataloader, val_dataloader, tokenizer_src, tokenizer_tgt
 
@@ -311,8 +312,8 @@ def train_model(config):
             
             global_step+=1
             
-        # with risk of failing
-        run_validation(model, val_dataloader, tokenizer_src, tokenizer_tgt, config['seq_len'], device, writer, global_step)
+        # with risk of failing - taking too long
+        # run_validation(model, val_dataloader, tokenizer_src, tokenizer_tgt, config['seq_len'], device, writer, global_step)
         
         
         model_filename = get_weights_file_path(config, f"{epoch:02d}")
@@ -331,4 +332,3 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     config = get_config()
     train_model(config)
-    
