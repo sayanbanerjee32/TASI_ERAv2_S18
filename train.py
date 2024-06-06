@@ -1,5 +1,6 @@
 from model import build_transformer
 from smart_batching_dataset import SmartBatchingBillingualDataset, casual_mask
+# from dataset import BillingualDataset, casual_mask
 from config_file import get_config, get_weights_file_path
 
 import torchtext.datasets as datasets
@@ -144,6 +145,9 @@ def get_ds(config):
     val_ds_size = len(ds_raw) - train_ds_size
     train_ds_raw, val_ds_raw = random_split(ds_raw, [train_ds_size, val_ds_size])
     
+    # train_ds = BillingualDataset(train_ds_raw, tokenizer_src, tokenizer_tgt, src_lang, tgt_lang, seq_len)
+    # val_ds = BillingualDataset(val_ds_raw, tokenizer_src, tokenizer_tgt, src_lang, tgt_lang, seq_len)
+    
     train_ds = SmartBatchingBillingualDataset(train_ds_raw, tokenizer_src, tokenizer_tgt, src_lang, tgt_lang, seq_len)
     val_ds = SmartBatchingBillingualDataset(val_ds_raw, tokenizer_src, tokenizer_tgt, src_lang, tgt_lang, seq_len)
     
@@ -162,7 +166,7 @@ def get_ds(config):
     # train_dataloader = DataLoader(train_ds, batch_size = config["batch_size"],
     #                             shuffle = True, collate_fn = collate_fn)
     train_dataloader = train_ds.get_dataloader(batch_size = config["batch_size"],
-                                               max_len = 300)
+                                               max_len = 309)
     val_dataloader = DataLoader(val_ds, batch_size = 1, shuffle = True)
     
     return train_dataloader, val_dataloader, tokenizer_src, tokenizer_tgt
@@ -289,5 +293,4 @@ if __name__ == "__main__":
     warnings.filterwarnings("ignore")
     config = get_config()
     train_model(config)
-    
     
