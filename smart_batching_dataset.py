@@ -185,8 +185,8 @@ class SmartBatchingCollate:
         return {
             "encoder_input":encoder_inputs,
             "decoder_input":decoder_inputs,
-            "encoder_mask":encoder_mask,
-            "decoder_mask":decoder_mask,
+            "encoder_mask":encoder_mask.unsqueeze(1).unsqueeze(1).int(),
+            "decoder_mask":decoder_mask.unsqueeze(1).int() & casual_mask(decoder_inputs.size(1)),
             "label":labels,
             "src_text":src_text,
             "tgt_text":tgt_text
