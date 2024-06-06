@@ -69,9 +69,9 @@ class SmartBatchingBillingualDataset(Dataset):
             dim = 0,
         )
         
-        assert encoder_input.size(0) == self.seq_len
-        assert decoder_input.size(0) == self.seq_len
-        assert label.size(0) == self.seq_len
+        # assert encoder_input.size(0) == self.seq_len
+        # assert decoder_input.size(0) == self.seq_len
+        # assert label.size(0) == self.seq_len
         
         return {
             "encoder_input": encoder_input,
@@ -85,8 +85,8 @@ class SmartBatchingBillingualDataset(Dataset):
             "label": label,
             "src_text": src_text,
             "tgt_text": tgt_text,
-            "encoder_str_length": len(enc_input_tokens),
-            "decoder_str_length": len(dec_input_tokens) 
+            # "encoder_str_length": len(enc_input_tokens),
+            # "decoder_str_length": len(dec_input_tokens) 
             }
     
     def get_dataloader(self, batch_size, max_len):
@@ -145,8 +145,21 @@ class SmartBatchingCollate:
         self._pad_token_id = pad_token_id
         
     def __call__(self, batch):
-        encoder_inputs_np, decoder_inputs_np, labels_np, src_text, tgt_text,  = list(zip(*batch))
+        # encoder_inputs_np, decoder_inputs_np, labels_np, src_text, tgt_text = list(zip(*batch))
         
+        encoder_inputs_np = []
+        decoder_inputs_np = []
+        labels_np = []
+        src_text = []
+        tgt_text = []
+        
+        for b in batch:
+            encoder_inputs_np.append(b["encoder_input"])
+            decoder_inputs_np.append(b["decoder_input"])
+            labels_np.append(b["label"])
+            src_text.append(b["src_text"])
+            tgt_text.append(b["tgt_text"])
+
         encoder_inputs, encoder_mask = self.pad_sequence(
             encoder_inputs_np,
             max_sequence_length=self._max_length,
@@ -170,11 +183,11 @@ class SmartBatchingCollate:
         # else:
         #     output = input_ids, attention_mask
         return {
-            "encoder_input":torch.vstack(encoder_inputs),
-            "decoder_input":torch.vstack(decoder_inputs),
-            "encoder_mask":torch.vstack(encoder_mask),
-            "decoder_mask":torch.vstack(decoder_mask),
-            "label":torch.vstack(labels),
+            "encoder_input":encoder_inputs,
+            "decoder_input":decoder_inputs,
+            "encoder_mask":encoder_mask,
+            "decoder_mask":decoder_mask,
+            "label":labels,
             "src_text":src_text,
             "tgt_text":tgt_text
         }
