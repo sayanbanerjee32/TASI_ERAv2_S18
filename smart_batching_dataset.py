@@ -186,7 +186,7 @@ class SmartBatchingCollate:
             "encoder_input":encoder_inputs,
             "decoder_input":decoder_inputs,
             "encoder_mask":encoder_mask.unsqueeze(1).unsqueeze(1).int(),
-            "decoder_mask":decoder_mask.unsqueeze(1).int() & casual_mask(decoder_inputs.size(1)),
+            "decoder_mask":decoder_mask.unsqueeze(1).unsqueeze(1).int() & casual_mask(decoder_inputs.size(1)),
             "label":labels,
             "src_text":src_text,
             "tgt_text":tgt_text
@@ -219,6 +219,3 @@ def casual_mask(size):
     mask = torch.triu(torch.ones((1, size, size)), diagonal = 1).type(torch.int)
     #This will get the upper traingle values
     return mask == 0
-    
-    
-    
