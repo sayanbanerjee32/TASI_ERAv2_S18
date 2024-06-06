@@ -89,7 +89,7 @@ class SmartBatchingBillingualDataset(Dataset):
             # "decoder_str_length": len(dec_input_tokens) 
             }
     
-    def get_dataloader(self, batch_size, max_len):
+    def get_dataloader(self, batch_size):
         self.sampler = SmartBatchingSampler(
             encoder_inputs=[self[i]["encoder_input"] for i in range(len(self))],
             batch_size=batch_size
@@ -99,7 +99,7 @@ class SmartBatchingBillingualDataset(Dataset):
             # labels=[self[i]["label"] for i in range(len(self))],
             # src_text = [self[i]["src_text"] for i in range(len(self))]
             # tgt_text = [self[i]["tgt_text"] for i in range(len(self))]
-            max_length=max_len,
+            max_length=self.seq_len,
             pad_token_id=self.pad_token
         )
         dataloader = DataLoader(
@@ -219,3 +219,6 @@ def casual_mask(size):
     mask = torch.triu(torch.ones((1, size, size)), diagonal = 1).type(torch.int)
     #This will get the upper traingle values
     return mask == 0
+    
+    
+    
