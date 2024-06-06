@@ -165,8 +165,7 @@ def get_ds(config):
     
     # train_dataloader = DataLoader(train_ds, batch_size = config["batch_size"],
     #                             shuffle = True, collate_fn = collate_fn)
-    train_dataloader = train_ds.get_dataloader(batch_size = config["batch_size"],
-                                               max_len = 309)
+    train_dataloader = train_ds.get_dataloader(batch_size = config["batch_size"])
     val_dataloader = DataLoader(val_ds, batch_size = 1, shuffle = True)
     
     return train_dataloader, val_dataloader, tokenizer_src, tokenizer_tgt
