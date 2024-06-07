@@ -7,6 +7,7 @@ import torchtext.datasets as datasets
 import torch
 torch.cuda.amp.autocast(enabled = True)
 from lion_pytorch import Lion
+import matplotlib.pyplot as plt
 
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader, random_split
@@ -256,7 +257,8 @@ def train_model(config):
         global_step = state["global_step"]
         print("preloaded")
         
-    loss_fn = nn.CrossEntropyLoss(ignore_index = tokenizer_src.token_to_id("[PAD]"), label_smoothing=0.1)
+    loss_fn = nn.CrossEntropyLoss(ignore_index = tokenizer_src.token_to_id("[PAD]"), 
+                                label_smoothing=0.1).to(device)
     
     # For amp on OneCycle Policy
     scaler = torch.cuda.amp.GradScaler()
@@ -265,7 +267,6 @@ def train_model(config):
     # for epoch in range(initial_epoch, config["num_epochs"]):
     for epoch in range(initial_epoch, EPOCHS):
         torch.cuda.empty_cache()
-        print(epoch)
         model.train()
         batch_iterator = tqdm(train_dataloader, desc = f"Processing Epoch {epoch:02d}")
         
@@ -308,7 +309,7 @@ def train_model(config):
             skip_lr_sched = (scale > scaler.get_scale())
             if not skip_lr_sched:
                 scheduler.step()
-            lr.append(scheduler.get_last_lr())
+            lr.append(scheduler.get_last_lr()[0])
             
             global_step+=1
             
@@ -326,6 +327,9 @@ def train_model(config):
             },
             model_filename
         )
+
+    # lr update history
+    plt.plot(lr)
         
             
 if __name__ == "__main__":
