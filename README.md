@@ -38,9 +38,9 @@ Experimented with both Adam and Liao optimiser and observed that Liaon optomiser
 
 ## Results
 ### Dynamic Padding
-- Time taken for each batch:
+- Time taken for each batch: 4 minutes
 - Loss after 18 epochs: 
 
 ### Uniform Length Batching
-- Time taken for each batch:
-- Loss after 18 epochs: 
+- Time taken for each batch: 2 minutes 15 seconds
+- Loss after 18 epochs: 2.8
