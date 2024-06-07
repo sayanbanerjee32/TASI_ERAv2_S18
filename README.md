@@ -27,7 +27,9 @@ Here sentences are first sorted based on length and then batches are created kee
 
 
 ### One Cycle Policy
-One Cycle policy is applied at the time of trining. The Learning rate is increased till 0.0001 in first 30% of training iteration and then anhealed in the rest.  
+One Cycle policy is applied at the time of trining. The Learning rate is increased till 0.0001 in first 30% of training iteration and then anhealed in the rest. Following graph shows how the learning rate is updated through out the iterations.
+![image](https://github.com/sayanbanerjee32/TASI_ERAv2_S18/assets/11560595/f807be64-c89d-484f-a5d7-0226c0cb1e39)
+
 
 ### Optimiser
 Experimented with both Adam and Liao optimiser and observed that Liaon optomiser has helped in convering faster
@@ -39,8 +41,8 @@ Experimented with both Adam and Liao optimiser and observed that Liaon optomiser
 ## Results
 ### Dynamic Padding
 - Time taken for each batch: 4 minutes
-- Loss after 18 epochs: 
+- Loss after 18 epochs: 1.687
 
 ### Uniform Length Batching
 - Time taken for each batch: 2 minutes 15 seconds
-- Loss after 18 epochs: 2.8
+- Loss after 18 epochs: 2.8 (Could not meet the criterion)
