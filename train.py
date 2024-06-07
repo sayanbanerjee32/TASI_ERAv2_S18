@@ -226,10 +226,10 @@ def train_model(config):
     #optimizer = torch.optim.Adam(model.parameters(), lr = config["lr"], eps = 1e-9)
     
     # LR for Lion is 1/3rd of Adam
-    optimizer = Lion(model.parameters(), lr = config["lr"], weight_decay= 1e-2)
+    optimizer = Lion(model.parameters(), lr = config["lr"] / 10, weight_decay= 1e-2)
 
     # One Cycle policy
-    MAX_LR = config["lr"] * 10
+    MAX_LR = config["lr"]
     STEPS_PER_EPOCH =  len(train_dataloader)   
     EPOCHS = config["num_epochs"]
     scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer,
@@ -288,7 +288,7 @@ def train_model(config):
                 tgt_vocab_size = tokenizer_tgt.get_vocab_size()
                 loss = loss_fn(proj_output.view(-1, tgt_vocab_size), label.view(-1))
             
-            batch_iterator.set_postfix({"loss": f"{loss.item():6.3f}"})
+            batch_iterator.set_postfix({"loss": f"{loss.item():6.3f}", " lr":f"{lr[-1]}"})
 
             #Log the loss
             writer.add_scalar('train_loss', loss.item(), global_step)
