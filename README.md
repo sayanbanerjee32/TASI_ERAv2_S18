@@ -1,4 +1,4 @@
-# TASI_ERAv2_S18
+# Uniform and Dynamic batching in Transformer
 
 ## Objective
 
